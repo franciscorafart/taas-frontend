@@ -1,4 +1,4 @@
-import { Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar, Container } from "react-bootstrap";
 // import logoImage from "assets/logo.png";
 import account, { defaultAccount } from "atoms/account";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -26,43 +26,45 @@ const Menu = () => {
 
   return (
     <>
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="">
-          {/* <img
+      <Navbar expand="lg" bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand href="/">
+            {/* <img
             src=""
             width="80"
             height="22"
             className="d-inline-block align-center"
             alt="TaaS logo"
           /> */}
-          TaaS
-        </Navbar.Brand>
-        <Navbar.Collapse className="justify-content-end">
-          {menu.map((item) => (
-            <Nav.Link
-              key={`menu-${item.title}`}
-              style={{ color: "white", padding: "0 10px" }}
-              href={item.linkString}
-            >
-              {item.title}
-            </Nav.Link>
-          ))}
-          {userExists ? (
-            <Nav.Item
-              style={{ color: "white", padding: "0 10px", cursor: "pointer" }}
-              onClick={onLogout}
-            >
-              Log out
-            </Nav.Item>
-          ) : (
-            <Nav.Item
-              style={{ color: "white", padding: "0 10px", cursor: "pointer" }}
-              onClick={() => navigate("/login")}
-            >
-              Log in
-            </Nav.Item>
-          )}
-        </Navbar.Collapse>
+            TaaS
+          </Navbar.Brand>
+          <Navbar.Collapse className="justify-content-end">
+            {menu.map((item) => (
+              <Nav.Link
+                key={`menu-${item.title}`}
+                style={{ color: "white", padding: "0 10px" }}
+                href={item.linkString}
+              >
+                {item.title}
+              </Nav.Link>
+            ))}
+            {userExists ? (
+              <Nav.Item
+                style={{ color: "white", padding: "0 10px", cursor: "pointer" }}
+                onClick={onLogout}
+              >
+                Log out
+              </Nav.Item>
+            ) : (
+              <Nav.Item
+                style={{ color: "white", padding: "0 10px", cursor: "pointer" }}
+                onClick={() => navigate("/login")}
+              >
+                Log in
+              </Nav.Item>
+            )}
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
     </>
   );

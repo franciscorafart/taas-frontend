@@ -4,10 +4,8 @@ This is an AI powered Tarot reading app
 
 ## How to run locally
 
-Currently the app runs with a serverless lambda backend, cureently I'm migrating it to use a node express backend. Do this:
-
-1. On `/client` directory run `$ yarn install` to instal front-end dependencies
-2. On `./client` directory, run `$ yarn dev` to run with nodemon
+1. On `./` directory run `$ yarn install` to instal front-end dependencies
+2. On `./` directory, run `$ yarn dev` to run with nodemon
 
 ## Deployment notes
 
