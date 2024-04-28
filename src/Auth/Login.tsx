@@ -17,10 +17,11 @@ import { Button } from "react-bootstrap";
 import { Form, FormLabel } from "react-bootstrap";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { colors } from "shared/theme";
 // import Alert from "components/shared/Alert";
 
 const Label = styled(FormLabel)`
-  color: white;
+  color: ${colors.backish};
   margin: 0;
 `;
 
@@ -113,6 +114,7 @@ export default function Login() {
           userId: data.id,
           email: data.email,
           role: data.role,
+          credits: data.credits,
         });
 
         navigate("/");

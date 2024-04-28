@@ -7,14 +7,15 @@ import { logout } from "requests/auth";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import alert from "atoms/alert";
+import { colors } from "shared/theme";
 
-const readerMenu = [{ title: "More readings", linkString: "/more-readings" }];
+const readerMenu = [{ title: "Other Spreads", linkString: "/spreads" }];
 
 const Menu = () => {
   const [userAccount, setUserAccount] = useRecoilState(account);
   const navigate = useNavigate();
   const setAlert = useSetRecoilState(alert);
-  const userExists = useMemo(() => userAccount, [userAccount]);
+  const userExists = useMemo(() => userAccount.userId, [userAccount]);
   const menu = userExists ? readerMenu : [];
 
   const onLogout = async () => {
@@ -38,7 +39,14 @@ const Menu = () => {
           /> */}
             TaaS
           </Navbar.Brand>
+          {/* <Navbar.Collapse className="justify-content-center">
+          </Navbar.Collapse> */}
           <Navbar.Collapse className="justify-content-end">
+            {userExists ? (
+              <Nav.Item style={{ color: colors.redish, padding: "0 10px" }}>
+                Remaining readings: {userAccount.credits}
+              </Nav.Item>
+            ) : null}
             {menu.map((item) => (
               <Nav.Link
                 key={`menu-${item.title}`}

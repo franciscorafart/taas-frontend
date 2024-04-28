@@ -4,6 +4,7 @@ export const defaultAccount = {
   userId: "",
   email: "",
   role: 0,
+  credits: 0,
 };
 
 const account = atom({

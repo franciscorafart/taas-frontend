@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useRecoilValue } from "recoil";
 // import StripeModal from "StripeModal";
 import Button from "react-bootstrap/Button";
 import { Spinner } from "react-bootstrap";
@@ -7,6 +8,7 @@ import { TarotCard } from "shared/types";
 import { colors } from "shared/theme";
 import { TAROT_DECK } from "utils/constants";
 import { getThreeCardReading } from "requests/reading";
+import account from "atoms/account";
 
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
@@ -14,23 +16,27 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Stack from "react-bootstrap/Stack";
 import styled from "styled-components";
 
-const defaultCards = [
-  {
-    value: "fool",
-    label: "The Fool",
-  },
-  {
-    value: "magician",
-    label: "The Magician",
-  },
-  {
-    value: "high_priestess",
-    label: "The High Priestess",
-  },
-];
+// const defaultCards =
+//   process.env.NODE_ENV === "development"
+//     ? [
+//         {
+//           value: "fool",
+//           label: "The Fool",
+//         },
+//         {
+//           value: "magician",
+//           label: "The Magician",
+//         },
+//         {
+//           value: "high_priestess",
+//           label: "The High Priestess",
+//         },
+//       ]
+//     : undefined;
 
 const ContainerStack = styled.div`
   background-color: ${colors.pastel};
+  height: 100vh;
 `;
 
 const ContentStack = styled(Stack)`
@@ -40,6 +46,7 @@ const TextContainer = styled.div`
   background-color: ${colors.white};
   border-radius: 20px;
   padding: 20px;
+  width: 700px;
 `;
 
 const CardStack = styled(Stack)`
@@ -48,8 +55,10 @@ const CardStack = styled(Stack)`
 
 export default function ReadingPage() {
   const [cardThrow, setCardThrow] = useState<TarotCard[] | undefined>(
-    defaultCards
+    undefined
   );
+  const userAccount = useRecoilValue(account);
+
   const [reading, setReading] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [question, setQuestion] = useState<string>("");
@@ -68,13 +77,13 @@ export default function ReadingPage() {
       ));
 
       return (
-        <div className={`section-${title}`}>
+        <div key={`section-${sIdx}-container`} className={`section-${title}`}>
           <span>{`${title}`}</span>
           <ul>{content}</ul>
         </div>
       );
     });
-    return <>{formattedSections.map((s) => s)}</>;
+    return formattedSections;
   };
 
   const handleThrow = async (e: FormEvent<HTMLFormElement>) => {
@@ -110,12 +119,17 @@ export default function ReadingPage() {
       <ContentStack gap={3}>
         <div>
           <h2>
-            <span>Past, Present, Future</span> Reading
+            <span>Tarot - Past, Present, Future</span> Reading
           </h2>
+          {!userAccount.userId && (
+            <span>Please log in to get your reading</span>
+          )}
         </div>
+        <h4>Instructions</h4>
         <p>
-          Write down your question and give some context on it to get the best
-          card reading.
+          This is a three card spread that reflects the past, present, and
+          possible future of your situation. Please write down your question and
+          give some context on it to get the most informative reading.
         </p>
 
         <Form onSubmit={handleThrow}>
@@ -132,7 +146,10 @@ export default function ReadingPage() {
               </InputGroup>
             </Form.Group>
             <Form.Group>
-              <Button type="submit" disabled={isGenerating || !question}>
+              <Button
+                type="submit"
+                disabled={isGenerating || !question || !userAccount.userId}
+              >
                 Get your spread
               </Button>
             </Form.Group>
@@ -141,18 +158,19 @@ export default function ReadingPage() {
 
         <Stack direction="horizontal" gap={2}>
           <CardStack direction="horizontal" gap={3}>
-            {cardThrow?.length &&
-              cardThrow.map((card) => (
-                <Card key={card.value}>
-                  <Card.Img
-                    variant="top"
-                    src={`/marseille/${card.value}.jpg`}
-                  />
-                  <Card.Body>
-                    <Card.Title>{card.label}</Card.Title>
-                  </Card.Body>
-                </Card>
-              ))}
+            {cardThrow?.length
+              ? cardThrow.map((card) => (
+                  <Card key={card.value}>
+                    <Card.Img
+                      variant="top"
+                      src={`/marseille/${card.value}.jpg`}
+                    />
+                    <Card.Body>
+                      <Card.Title>{card.label}</Card.Title>
+                    </Card.Body>
+                  </Card>
+                ))
+              : null}
           </CardStack>
 
           <TextContainer>

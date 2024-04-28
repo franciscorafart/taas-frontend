@@ -20,6 +20,7 @@ function MainLayout({ children }: { children: ReactNode }) {
         userId: user.id,
         email: user.email,
         role: user.role,
+        credits: user.credits,
       });
 
       if (user.role >= Roles.Admin) {

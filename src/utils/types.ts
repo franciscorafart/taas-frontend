@@ -5,6 +5,7 @@ export type UserType = {
   lastName: string;
   confirmed: boolean;
   role: number;
+  credits: number;
   createdAt: string;
   updatedAt: string;
   imageUrl?: string;

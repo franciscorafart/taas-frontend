@@ -1,7 +1,8 @@
+import { colors } from "shared/theme";
 import styled from "styled-components";
 
 export const H2 = styled.h2`
-  color: white;
+  color: ${colors.blueish};
   font-size: 1.5rem;
 `;
 export const FormElements = styled.div`
@@ -18,7 +19,7 @@ export const FormElement = styled.div`
 
 export const Link = styled.div`
   font-size: 12px;
-  color: white;
+  color: ${colors.blueish};
   cursor: pointer;
 `;
 
@@ -30,6 +31,7 @@ export const LinkContainer = styled.div`
 `;
 
 export const Container = styled.div`
+  background-color: ${colors.pastel};
   display: flex;
   padding: 20px;
 `;

@@ -20,6 +20,7 @@ type LoginResponse = PostResponse & {
   email: string;
   token: string;
   role: number;
+  credits: number;
   msg?: string;
   companyId?: string;
 };
