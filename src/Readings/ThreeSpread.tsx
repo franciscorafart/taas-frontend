@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useRecoilValue } from "recoil";
 // import StripeModal from "StripeModal";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
 import { Spinner } from "react-bootstrap";
 import { TarotCard } from "shared/types";
 import { colors } from "shared/theme";
@@ -36,11 +37,21 @@ import styled from "styled-components";
 
 const ContainerStack = styled.div`
   height: 100vh;
+  padding: 80px 0;
 `;
 
 const ContentStack = styled(Stack)`
-  padding: 80px 60px;
+  align-items: center;
 `;
+
+const TopContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 700px;
+`;
+
 const TextContainer = styled.div`
   background-color: ${colors.white};
   border-radius: 20px;
@@ -49,7 +60,7 @@ const TextContainer = styled.div`
 `;
 
 const CardStack = styled(Stack)`
-  align-items: start;
+  justify-content: center;
 `;
 
 export default function ReadingPage() {
@@ -112,27 +123,32 @@ export default function ReadingPage() {
     }
   };
   const content = reading && cardThrow?.length ? formatContent(reading) : null;
-  // console.log("content", content);
+
   return (
     <ContainerStack>
       <ContentStack gap={3}>
-        <div>
+        <TopContainer>
+          <Image
+            roundedCircle
+            src="/marseille/world.jpg"
+            width={120}
+            height={120}
+          />
           <h2>
             <span>Tarot - Past, Present, Future</span> Reading
           </h2>
           {!userAccount.userId && (
             <span>Please log in to get your reading</span>
           )}
-        </div>
-        <h4>Instructions</h4>
-        <p>
-          This is a three card spread that reflects the past, present, and
-          possible future of your situation. Please write down your question and
-          give some context on it to get the most informative reading.
-        </p>
+          <p>
+            This is a three card spread that reflects the past, present, and
+            possible future of your situation. Please write down your question
+            and give some context on it to get the most informative reading.
+          </p>
+        </TopContainer>
 
         <Form onSubmit={handleThrow}>
-          <Stack gap={3}>
+          <ContentStack gap={3}>
             <Form.Group>
               <InputGroup>
                 <InputGroup.Text>Ask the Tarot</InputGroup.Text>
@@ -147,15 +163,20 @@ export default function ReadingPage() {
             <Form.Group>
               <Button
                 type="submit"
-                disabled={isGenerating || !question || !userAccount.userId}
+                disabled={
+                  isGenerating ||
+                  !question ||
+                  !userAccount.userId ||
+                  Boolean(cardThrow?.length)
+                }
               >
                 Get your spread
               </Button>
             </Form.Group>
-          </Stack>
+          </ContentStack>
         </Form>
 
-        <Stack direction="horizontal" gap={2}>
+        <ContentStack gap={2}>
           <CardStack direction="horizontal" gap={3}>
             {cardThrow?.length
               ? cardThrow.map((card) => (
@@ -163,6 +184,7 @@ export default function ReadingPage() {
                     <Card.Img
                       variant="top"
                       src={`/marseille/${card.value}.jpg`}
+                      height={200}
                     />
                     <Card.Body>
                       <Card.Title>{card.label}</Card.Title>
@@ -188,7 +210,7 @@ export default function ReadingPage() {
               </div>
             )}
           </TextContainer>
-        </Stack>
+        </ContentStack>
 
         {/* <Button onClick={() => setDisplayForm(true)}>Buy More Credits</Button>
       <StripeModal open={displayForm} handleClose={handleStripeModalClose} /> */}
