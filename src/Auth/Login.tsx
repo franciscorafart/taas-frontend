@@ -18,10 +18,9 @@ import { Form, FormLabel } from "react-bootstrap";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { colors } from "shared/theme";
-import Alerta from "shared/Alerta";
 
 const Label = styled(FormLabel)`
-  color: ${colors.backish};
+  color: ${colors.blackish};
   margin: 0;
 `;
 
@@ -146,7 +145,6 @@ export default function Login() {
 
   return (
     <div className="min-h-full">
-      <Alerta />
       <Container>
         <div>
           <TitleContainer>

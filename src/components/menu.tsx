@@ -9,7 +9,8 @@ import { useMemo } from "react";
 import alert from "atoms/alert";
 import { colors } from "shared/theme";
 
-const readerMenu = [{ title: "Other Spreads", linkString: "/spreads" }];
+// const readerMenu: {title: string, linkString: string}[] = [{ title: "Other Spreads", linkString: "/spreads" }];
+const readerMenu: { title: string; linkString: string }[] = [];
 
 const Menu = () => {
   const [userAccount, setUserAccount] = useRecoilState(account);

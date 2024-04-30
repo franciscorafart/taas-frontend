@@ -29,8 +29,6 @@ function MainLayout({ children }: { children: ReactNode }) {
         setUserRoute({ request: "", navigation: "" });
         setTimeout(() => navigate("/"), 1000);
       }
-    } else {
-      navigate("/");
     }
   }, [navigate, setUserAccount, setUserRoute]);
 

@@ -2,27 +2,33 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import alert from "atoms/alert";
 import { resetPassword, validateJWT } from "requests/auth";
-import { goHome, isRepeatValid, signUpPasswordValid } from "utils/login";
+import { isRepeatValid, signUpPasswordValid } from "utils/login";
 import { Container, FormElements, FormElement, H2 } from "./shared";
 import { Form, Button, FormLabel } from "react-bootstrap";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import styled from "styled-components";
 import Alerta from "shared/Alerta";
+import { useNavigate } from "react-router-dom";
+import { colors } from "shared/theme";
 
 const GreenCheck = styled(CheckCircleIcon)`
   color: green;
-  width: 20px;
+  width: 30px;
   padding-left: 5px;
 `;
 
 const GrayCheck = styled(CheckCircleIcon)`
   color: gray;
-  width: 20px;
+  width: 30px;
   padding-left: 5px;
 `;
 const Label = styled(FormLabel)`
-  color: white;
+  color: ${colors.blackish};
   margin: 0;
+`;
+
+const Input = styled(Form.Control)`
+  max-width: 400px;
 `;
 
 function ResetPassword() {
@@ -30,6 +36,7 @@ function ResetPassword() {
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const [tokenExpired, setTokenExpired] = useState(false);
+  const navigate = useNavigate();
 
   const [formPassword, setFormPassword] = useState("");
   const [formRepeatPassword, setFormRepeatPassword] = useState("");
@@ -106,20 +113,19 @@ function ResetPassword() {
     return <H2>Link expired</H2>;
   }
   return (
-    <Container>
-      {alerta.display && <Alerta />}
-      <div>
+    <div className="min-h-full">
+      <Alerta />
+      <Container>
         <div>
           <H2>
             {success
               ? "Password set. Please Log in."
-              : "Set up your new password"}
+              : `Set up your new password for ${email}`}
           </H2>
-          <h6 className="text-center text-gray-900">{email}</h6>
 
           {success ? (
             <div>
-              <Button onClick={goHome} variant="secondary">
+              <Button onClick={() => navigate("/login")} variant="secondary">
                 Back
               </Button>
             </div>
@@ -128,11 +134,10 @@ function ResetPassword() {
               <div>
                 <FormElements>
                   <FormElement>
-                    <Label htmlFor="password" className="sr-only">
+                    {/* <Label htmlFor="password" className="sr-only">
                       Password
-                      {passwordOk ? <GreenCheck /> : <GrayCheck />}
-                    </Label>
-                    <Form.Control
+                    </Label> */}
+                    <Input
                       id="password"
                       name="password"
                       type="password"
@@ -141,16 +146,16 @@ function ResetPassword() {
                       onChange={handleFormPassword}
                       autoComplete="current-password"
                       required
-                      placeholder="Contraseña"
+                      placeholder="New Password"
                     />
+                    {passwordOk ? <GreenCheck /> : <GrayCheck />}
                   </FormElement>
 
                   <FormElement>
-                    <Label htmlFor="repeat-password" className="sr-only">
+                    {/* <Label htmlFor="repeat-password" className="sr-only">
                       Repeat Password
-                      {repeatOk ? <GreenCheck /> : <GrayCheck />}
-                    </Label>
-                    <Form.Control
+                    </Label> */}
+                    <Input
                       id="repeat-password"
                       name="repeat-password"
                       type="password"
@@ -158,8 +163,9 @@ function ResetPassword() {
                       value={formRepeatPassword}
                       onChange={handleFormRepeatPassword}
                       required
-                      placeholder="Repite Contraseña"
+                      placeholder="Repeat New Password"
                     />
+                    {repeatOk ? <GreenCheck /> : <GrayCheck />}
                   </FormElement>
                   <Label>
                     Your password should have at least 8 characters that include
@@ -177,8 +183,8 @@ function ResetPassword() {
             </Form>
           )}
         </div>
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 }
 
