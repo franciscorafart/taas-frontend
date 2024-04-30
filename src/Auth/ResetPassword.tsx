@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import alert from "atoms/alert";
 import { resetPassword, validateJWT } from "requests/auth";
 import { isRepeatValid, signUpPasswordValid } from "utils/login";
@@ -41,7 +41,7 @@ function ResetPassword() {
   const [formPassword, setFormPassword] = useState("");
   const [formRepeatPassword, setFormRepeatPassword] = useState("");
 
-  const [alerta, setAlert] = useRecoilState(alert);
+  const setAlert = useSetRecoilState(alert);
 
   useEffect(() => {
     const validateToken = async () => {
