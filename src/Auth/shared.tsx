@@ -31,9 +31,9 @@ export const LinkContainer = styled.div`
 `;
 
 export const Container = styled.div`
-  background-color: ${colors.pastel};
   display: flex;
   padding: 20px;
+  height: 100vh;
 `;
 
 export const TitleContainer = styled.div`

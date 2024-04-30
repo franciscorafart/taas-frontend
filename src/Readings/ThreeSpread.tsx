@@ -35,7 +35,6 @@ import styled from "styled-components";
 //     : undefined;
 
 const ContainerStack = styled.div`
-  background-color: ${colors.pastel};
   height: 100vh;
 `;
 

@@ -1,0 +1,11 @@
+:root {
+  --redish: #f08e80;
+  --pastel: #fdf0e6;
+  --blueish: #0b0d63;
+  --backish: #0b0d63;
+  --white: #ffffff;
+}
+
+body {
+  background-color: var(--pastel);
+}

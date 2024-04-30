@@ -6,6 +6,7 @@ import ResetPassword from "Auth/ResetPassword";
 import ThreeSpread from "Readings/ThreeSpread";
 import MainLayout from "MainLayout";
 import Login from "Auth/Login";
+import "./App.css";
 
 function App() {
   return (
