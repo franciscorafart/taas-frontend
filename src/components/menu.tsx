@@ -28,7 +28,7 @@ const Menu = () => {
 
   return (
     <>
-      <Navbar expand="lg" bg="dark" variant="dark">
+      <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand href="/">
             {/* <img
