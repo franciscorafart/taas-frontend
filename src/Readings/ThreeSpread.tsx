@@ -45,6 +45,10 @@ const ContentStack = styled(Stack)`
 
 const ReadingStack = styled(Stack)`
   align-items: start;
+
+  @media only screen and (max-width: 992px) {
+    flex-direction: column;
+  }
 `;
 
 const TopContainer = styled.div`
@@ -59,8 +63,15 @@ const TextContainer = styled.div`
   border-radius: 20px;
   padding: 20px;
   max-width: 50%;
+
+  @media only screen and (max-width: 992px) {
+    max-width: 100%;
+  }
 `;
 
+const CardImage = styled(Card.Img)`
+  max-width: 400px;
+`;
 const CardStack = styled(Stack)`
   align-items: start;
   justify-content: center;
@@ -183,10 +194,9 @@ export default function ReadingPage() {
             {cardThrow?.length
               ? cardThrow.map((card) => (
                   <Card key={card.value}>
-                    <Card.Img
+                    <CardImage
                       variant="top"
                       src={`/marseille/${card.value}.jpg`}
-                      height={400}
                     />
                     <Card.Body>
                       <Card.Text>{card.label}</Card.Text>
