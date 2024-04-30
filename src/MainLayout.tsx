@@ -14,7 +14,6 @@ function MainLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const getUser = useCallback(async () => {
     const user = await getAuthUser();
-    console.log("user", user);
     if (user) {
       setUserAccount({
         userId: user.id,
@@ -37,7 +36,7 @@ function MainLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [getUser]);
 
   return (
     <div className="min-h-full">

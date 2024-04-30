@@ -18,7 +18,7 @@ import { Form, FormLabel } from "react-bootstrap";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { colors } from "shared/theme";
-// import Alert from "components/shared/Alert";
+import Alert from "shared/Alerta";
 
 const Label = styled(FormLabel)`
   color: ${colors.backish};
@@ -138,7 +138,7 @@ export default function Login() {
 
   return (
     <Container>
-      {/* {alerta.display && <Alert />} */}
+      {alerta.display && <Alert />}
       <div>
         <TitleContainer>
           {/* <img
