@@ -6,7 +6,6 @@ import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import { Spinner } from "react-bootstrap";
 import { TarotCard } from "shared/types";
-import { colors } from "shared/theme";
 import { TAROT_DECK } from "utils/constants";
 import { getThreeCardReading } from "requests/reading";
 import account from "atoms/account";
@@ -37,11 +36,15 @@ import styled from "styled-components";
 
 const ContainerStack = styled.div`
   height: 100vh;
-  padding: 80px 0;
+  padding: 80px 40px;
 `;
 
 const ContentStack = styled(Stack)`
   align-items: center;
+`;
+
+const ReadingStack = styled(Stack)`
+  align-items: start;
 `;
 
 const TopContainer = styled.div`
@@ -53,13 +56,13 @@ const TopContainer = styled.div`
 `;
 
 const TextContainer = styled.div`
-  background-color: ${colors.white};
   border-radius: 20px;
   padding: 20px;
-  width: 700px;
+  max-width: 50%;
 `;
 
 const CardStack = styled(Stack)`
+  align-items: start;
   justify-content: center;
 `;
 
@@ -78,18 +81,17 @@ export default function ReadingPage() {
     const sections = res.split("\n\n");
     // Format the sections into HTML markup
     const formattedSections = sections.map((section, sIdx) => {
-      const lines = section.split("\\n");
-      const title = lines[0].replace(/\*\*|\*\*/g, ""); // Extracting the title without asterisks
-      const content = lines.slice(1).map((line, lIdx) => (
-        <li key={`section-${sIdx}-line-${lIdx}`} className="text-sm">
+      const lines = section.split("\n");
+      // const title = lines[0].replace(/\*\*|\*\*/g, ""); // Extracting the title without asterisks
+      const content = lines.map((line, lIdx) => (
+        <p key={`section-${sIdx}-line-${lIdx}`} className="text-sm">
           {line.replace(/^\*\s/, "")}
-        </li>
+        </p>
       ));
 
       return (
-        <div key={`section-${sIdx}-container`} className={`section-${title}`}>
-          <span>{`${title}`}</span>
-          <ul>{content}</ul>
+        <div key={`section-${sIdx}-container`}>
+          <>{content}</>
         </div>
       );
     });
@@ -126,7 +128,7 @@ export default function ReadingPage() {
 
   return (
     <ContainerStack>
-      <ContentStack gap={3}>
+      <ContentStack gap={5}>
         <TopContainer>
           <Image
             roundedCircle
@@ -176,7 +178,7 @@ export default function ReadingPage() {
           </ContentStack>
         </Form>
 
-        <ContentStack gap={2}>
+        <ReadingStack direction="horizontal" gap={2}>
           <CardStack direction="horizontal" gap={3}>
             {cardThrow?.length
               ? cardThrow.map((card) => (
@@ -184,33 +186,27 @@ export default function ReadingPage() {
                     <Card.Img
                       variant="top"
                       src={`/marseille/${card.value}.jpg`}
-                      height={200}
+                      height={400}
                     />
                     <Card.Body>
-                      <Card.Title>{card.label}</Card.Title>
+                      <Card.Text>{card.label}</Card.Text>
                     </Card.Body>
                   </Card>
                 ))
               : null}
           </CardStack>
 
-          <TextContainer>
-            {content ? (
-              content
-            ) : (
-              <div className="mt-6 space-y-6">
-                {isGenerating ? (
-                  <>
-                    <Spinner />
-                    ...Reading your cards
-                  </>
-                ) : (
-                  <span>...</span>
-                )}
-              </div>
-            )}
-          </TextContainer>
-        </ContentStack>
+          {content ? (
+            <TextContainer>{content}</TextContainer>
+          ) : isGenerating ? (
+            <>
+              <Spinner />
+              ...Reading your cards
+            </>
+          ) : (
+            <TextContainer>...</TextContainer>
+          )}
+        </ReadingStack>
 
         {/* <Button onClick={() => setDisplayForm(true)}>Buy More Credits</Button>
       <StripeModal open={displayForm} handleClose={handleStripeModalClose} /> */}
