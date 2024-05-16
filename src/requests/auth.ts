@@ -124,15 +124,15 @@ export const logout = async () => {
   return res;
 };
 
-export const getIp = async () => {
-  const res = await getExternal<{ ip: string }>({
-    url: "https://api.ipify.org/?format=json",
-  });
-  console.log(res);
-  return res?.ip || "";
-};
-
 export const getFreebies = async (payload: { ip: string }) => {
   const res = await post<FreebiesResponse>({ route: "auth/freebies", payload });
+  return res;
+};
+
+export const getFreeCount = async () => {
+  const res = await get<{ success: boolean; count: number }>({
+    route: "auth/free-count",
+  });
+
   return res;
 };

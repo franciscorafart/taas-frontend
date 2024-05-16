@@ -1,12 +1,13 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 // import StripeModal from "StripeModal";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import { Spinner } from "react-bootstrap";
 import { TarotCard } from "shared/types";
 import { TAROT_DECK } from "utils/constants";
+import alert from "atoms/alert";
 import { getThreeCardFreeReading, getThreeCardReading } from "requests/reading";
 import account from "atoms/account";
 
@@ -15,6 +16,10 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Stack from "react-bootstrap/Stack";
 import styled from "styled-components";
+import useFreeCount from "utils/hooks/useFreeCount";
+import accountInState from "atoms/account";
+import freebies from "atoms/freebies";
+import { getAuthUser, getFreeCount } from "requests/auth";
 
 // const defaultCards =
 //   process.env.NODE_ENV === "development"
@@ -78,10 +83,31 @@ const CardStack = styled(Stack)`
 `;
 
 export default function ReadingPage() {
+  useFreeCount();
+  const setUserAccount = useSetRecoilState(accountInState);
   const [cardThrow, setCardThrow] = useState<TarotCard[] | undefined>(
     undefined
   );
   const userAccount = useRecoilValue(account);
+  const [freebs, setFreebies] = useRecoilState(freebies);
+  const setAlert = useSetRecoilState(alert);
+
+  const reloadUser = useCallback(async () => {
+    const user = await getAuthUser();
+    if (user) {
+      setUserAccount({
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+        credits: user.credits,
+      });
+    }
+  }, [setUserAccount]);
+
+  const findFreebies = useCallback(async () => {
+    const res = await getFreeCount();
+    setFreebies(Number(res?.count || 0));
+  }, [setFreebies]);
 
   const [reading, setReading] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -112,27 +138,57 @@ export default function ReadingPage() {
   const handleThrow = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
+
+      if (!userAccount.userId && freebs <= 0) {
+        setAlert({
+          display: true,
+          variant: "warning",
+          message:
+            "You have no more free readings left. Sign up or log in to get more free readings.",
+        });
+
+        return;
+      }
+
+      if (userAccount.userId && userAccount.credits <= 0) {
+        setAlert({
+          display: true,
+          variant: "warning",
+          message: "You have no more readings left. Please buy more credits.",
+        });
+
+        return;
+      }
+
       setIsGenerating(true);
       const cards = [];
       for (let i = 0; i < 3; i++) {
         cards.push(TAROT_DECK[Math.floor(Math.random() * 78)]);
       }
 
-      setCardThrow(cards);
-
       const res = userAccount.userId
         ? await getThreeCardReading({ question, cards })
         : await getThreeCardFreeReading({ question, cards });
 
-      if (!res) {
+      if (!res || !res.success) {
         throw new Error("Failed to generate reading");
       }
 
       setReading(res.data);
+      setCardThrow(cards);
+      if (!userAccount.userId) {
+        await findFreebies();
+      } else {
+        await reloadUser();
+      }
+
       setIsGenerating(false);
     } catch (err: any) {
-      // TODO: Implement alert
-      // setAlert({ display: true, variant: "danger", message: err.message });
+      setAlert({
+        display: true,
+        variant: "danger",
+        message: "Failed to generate reading",
+      });
 
       setIsGenerating(false);
       setReading(
@@ -179,12 +235,7 @@ export default function ReadingPage() {
               </InputGroup>
             </Form.Group>
             <Form.Group>
-              <Button
-                type="submit"
-                disabled={
-                  isGenerating || !question || Boolean(cardThrow?.length)
-                }
-              >
+              <Button type="submit" disabled={isGenerating || !question}>
                 Get your spread
               </Button>
             </Form.Group>

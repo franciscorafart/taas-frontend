@@ -51,7 +51,7 @@ const Menu = () => {
               </Nav.Item>
             ) : (
               <Nav.Item style={{ color: colors.redish, padding: "0 10px" }}>
-                Remaining readings: {freebs}
+                Remaining free readings: {freebs}
               </Nav.Item>
             )}
             {menu.map((item) => (
