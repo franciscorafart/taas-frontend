@@ -1,17 +1,34 @@
 import { ReactNode, useCallback, useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import accountInState from "atoms/account";
+import freebies from "atoms/freebies";
 import { getAuthUser } from "requests/auth";
 import { Roles } from "utils/enums";
 import { useNavigate } from "react-router-dom";
-import userRoute from "atoms/userRoute";
 import Alerta from "shared/Alerta";
+import userRoute from "atoms/userRoute";
 
 function MainLayout({ children }: { children: ReactNode }) {
   const setUserAccount = useSetRecoilState(accountInState);
   const setUserRoute = useSetRecoilState(userRoute);
-
   const navigate = useNavigate();
+
+  const setFreebies = useSetRecoilState(freebies);
+
+  const findFreebies = useCallback(async () => {
+    let f = localStorage.getItem("taas");
+    if (f === undefined || f === null) {
+      // TODO: Check if ip already used freebies
+      localStorage.setItem("taas", "3");
+      setFreebies(3);
+    } else if (Number.isInteger(Number(f)) && Number(f) > 0) {
+      // If not, remove from local storage
+      // const count = String(Number(f) - 1);
+      // localStorage.setItem("taas", count);
+      setFreebies(Number(f));
+    }
+  }, [setFreebies]);
+
   const getUser = useCallback(async () => {
     const user = await getAuthUser();
     if (user) {
@@ -31,6 +48,10 @@ function MainLayout({ children }: { children: ReactNode }) {
       }
     }
   }, [navigate, setUserAccount, setUserRoute]);
+
+  useEffect(() => {
+    findFreebies();
+  }, [findFreebies]);
 
   useEffect(() => {
     getUser();

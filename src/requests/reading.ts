@@ -19,3 +19,11 @@ export const getThreeCardReading = async (payload: ThreeSpreadPayload) => {
   });
   return res;
 };
+
+export const getThreeCardFreeReading = async (payload: ThreeSpreadPayload) => {
+  const res = await post<PostResponse>({
+    route: "reading/three-spread-f",
+    payload,
+  });
+  return res;
+};

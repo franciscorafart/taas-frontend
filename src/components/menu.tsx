@@ -1,13 +1,14 @@
 import { Nav, Navbar, Container } from "react-bootstrap";
 // import logoImage from "assets/logo.png";
 import account, { defaultAccount } from "atoms/account";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
 // import { Roles } from "utils/enums";
 import { logout } from "requests/auth";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import alert from "atoms/alert";
 import { colors } from "shared/theme";
+import freebies from "atoms/freebies";
 
 // const readerMenu: {title: string, linkString: string}[] = [{ title: "Other Spreads", linkString: "/spreads" }];
 const readerMenu: { title: string; linkString: string }[] = [];
@@ -18,6 +19,7 @@ const Menu = () => {
   const setAlert = useSetRecoilState(alert);
   const userExists = useMemo(() => userAccount.userId, [userAccount]);
   const menu = userExists ? readerMenu : [];
+  const freebs = useRecoilValue(freebies);
 
   const onLogout = async () => {
     await logout();
@@ -47,7 +49,11 @@ const Menu = () => {
               <Nav.Item style={{ color: colors.redish, padding: "0 10px" }}>
                 Remaining readings: {userAccount.credits}
               </Nav.Item>
-            ) : null}
+            ) : (
+              <Nav.Item style={{ color: colors.redish, padding: "0 10px" }}>
+                Remaining readings: {freebs}
+              </Nav.Item>
+            )}
             {menu.map((item) => (
               <Nav.Link
                 key={`menu-${item.title}`}

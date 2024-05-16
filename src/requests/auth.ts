@@ -1,6 +1,6 @@
 import { UserType } from "../utils/types";
 import { ResponseStatus } from "../utils/enums";
-import { get, post } from "./utils";
+import { get, getExternal, post } from "./utils";
 
 type GetResponse = {
   success: boolean;
@@ -11,6 +11,15 @@ type GetResponse = {
 type PostResponse = {
   success: boolean;
   email?: string;
+  msg?: string;
+  status: ResponseStatus;
+};
+
+type FreebiesResponse = {
+  success: boolean;
+  data: {
+    count: number;
+  };
   msg?: string;
   status: ResponseStatus;
 };
@@ -112,5 +121,18 @@ export const logout = async () => {
 
   localStorage.removeItem("taasToken");
 
+  return res;
+};
+
+export const getIp = async () => {
+  const res = await getExternal<{ ip: string }>({
+    url: "https://api.ipify.org/?format=json",
+  });
+  console.log(res);
+  return res?.ip || "";
+};
+
+export const getFreebies = async (payload: { ip: string }) => {
+  const res = await post<FreebiesResponse>({ route: "auth/freebies", payload });
   return res;
 };

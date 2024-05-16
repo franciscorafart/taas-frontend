@@ -79,3 +79,22 @@ export async function get<ResultType>({
     return null;
   }
 }
+
+export async function getExternal<ResultType>({
+  url,
+}: {
+  url: string;
+}): Promise<ResultType | null> {
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      cache: "no-cache",
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+    });
+
+    return res.json();
+  } catch {
+    return null;
+  }
+}

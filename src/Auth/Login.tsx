@@ -151,7 +151,7 @@ export default function Login() {
             {/* <img
               className="mx-auto h-10 w-auto"
               src=""
-              alt="Rafart Logo"
+              alt="TaaS Logo"
             /> */}
             <H2>Authentication</H2>
           </TitleContainer>

@@ -7,7 +7,7 @@ import Image from "react-bootstrap/Image";
 import { Spinner } from "react-bootstrap";
 import { TarotCard } from "shared/types";
 import { TAROT_DECK } from "utils/constants";
-import { getThreeCardReading } from "requests/reading";
+import { getThreeCardFreeReading, getThreeCardReading } from "requests/reading";
 import account from "atoms/account";
 
 import Card from "react-bootstrap/Card";
@@ -120,15 +120,20 @@ export default function ReadingPage() {
 
       setCardThrow(cards);
 
-      // TODO: Implement request to the backend
-      const res = await getThreeCardReading({ question, cards });
+      const res = userAccount.userId
+        ? await getThreeCardReading({ question, cards })
+        : await getThreeCardFreeReading({ question, cards });
+
       if (!res) {
         throw new Error("Failed to generate reading");
       }
+
       setReading(res.data);
       setIsGenerating(false);
     } catch (err: any) {
-      console.error("Error", err.message);
+      // TODO: Implement alert
+      // setAlert({ display: true, variant: "danger", message: err.message });
+
       setIsGenerating(false);
       setReading(
         "Oops. An error occurred while generating the reading. Please try again later."
@@ -177,10 +182,7 @@ export default function ReadingPage() {
               <Button
                 type="submit"
                 disabled={
-                  isGenerating ||
-                  !question ||
-                  !userAccount.userId ||
-                  Boolean(cardThrow?.length)
+                  isGenerating || !question || Boolean(cardThrow?.length)
                 }
               >
                 Get your spread

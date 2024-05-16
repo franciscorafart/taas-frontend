@@ -1,6 +1,6 @@
 ## Only used for development  ##
 FROM node:16
-LABEL maintainer="Francisco Rafart <francisco.rafart@gmail.com>"
+LABEL maintainer="Francisco Rafart <francisco@rafart.tech>"
 
 WORKDIR /app
 

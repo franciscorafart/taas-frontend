@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
-
 import Menu from "components/menu";
 import ResetPassword from "Auth/ResetPassword";
 import ThreeSpread from "Readings/ThreeSpread";
