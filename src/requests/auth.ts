@@ -1,6 +1,6 @@
 import { UserType } from "../utils/types";
 import { ResponseStatus } from "../utils/enums";
-import { get, getExternal, post } from "./utils";
+import { get, post } from "./utils";
 
 type GetResponse = {
   success: boolean;
