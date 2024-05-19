@@ -52,3 +52,18 @@ export const TAROT_DECK = [
     })
   ),
 ];
+
+export const DEFAULT_CARDS = [
+  {
+    value: "fool",
+    label: "The Fool",
+  },
+  {
+    value: "magician",
+    label: "The Magician",
+  },
+  {
+    value: "high_priestess",
+    label: "The High Priestess",
+  },
+];

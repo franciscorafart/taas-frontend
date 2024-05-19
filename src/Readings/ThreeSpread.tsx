@@ -20,24 +20,6 @@ import accountInState from "atoms/account";
 import freebies from "atoms/freebies";
 import { getAuthUser, getFreeCount } from "requests/auth";
 
-// const defaultCards =
-//   process.env.NODE_ENV === "development"
-//     ? [
-//         {
-//           value: "fool",
-//           label: "The Fool",
-//         },
-//         {
-//           value: "magician",
-//           label: "The Magician",
-//         },
-//         {
-//           value: "high_priestess",
-//           label: "The High Priestess",
-//         },
-//       ]
-//     : undefined;
-
 const ContainerStack = styled.div`
   height: 100vh;
   padding: 80px 40px;
@@ -79,6 +61,16 @@ const CardImage = styled(Card.Img)`
 const CardStack = styled(Stack)`
   align-items: start;
   justify-content: center;
+`;
+
+const StyledInputGroup = styled(InputGroup)`
+  width: 600px;
+  height 400px;
+
+  @media only screen and (max-width: 992px) {
+    width: 100%;
+    height: 120px;
+  }
 `;
 
 export default function ReadingPage() {
@@ -211,7 +203,12 @@ export default function ReadingPage() {
             <span>Tarot - Past, Present, Future</span> Reading
           </h2>
           {!userAccount.userId && (
-            <span>Please log in to get your reading</span>
+            <span>
+              <i>
+                *** Sign up for extra free spreads and more insightful and
+                complete readings ***
+              </i>
+            </span>
           )}
           <p>
             This is a three card spread that reflects the past, present, and
@@ -223,28 +220,22 @@ export default function ReadingPage() {
         <Form onSubmit={handleThrow}>
           <ContentStack gap={3}>
             <Form.Group>
-              <InputGroup>
+              <StyledInputGroup>
                 <InputGroup.Text>Ask the Tarot</InputGroup.Text>
                 <Form.Control
                   onChange={(e) => setQuestion(e.target.value)}
                   value={question}
                   as="textarea"
                   aria-label="With textarea"
+                  placeholder="What would you like to know? Give some context"
                 />
-              </InputGroup>
+              </StyledInputGroup>
             </Form.Group>
             <Form.Group>
               <Button type="submit" disabled={isGenerating || !question}>
                 Get your spread
               </Button>
             </Form.Group>
-            {!userAccount.userId ? (
-              <Form.Group>
-                <Form.Label>
-                  * Sign up for extra free spreads and more insightful readings
-                </Form.Label>
-              </Form.Group>
-            ) : null}
           </ContentStack>
         </Form>
 
