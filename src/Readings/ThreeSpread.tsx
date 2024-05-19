@@ -1,6 +1,6 @@
 import { useState, FormEvent, useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 // import StripeModal from "StripeModal";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
@@ -9,7 +9,6 @@ import { TarotCard } from "shared/types";
 import { TAROT_DECK } from "utils/constants";
 import alert from "atoms/alert";
 import { getThreeCardFreeReading, getThreeCardReading } from "requests/reading";
-import account from "atoms/account";
 
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
@@ -84,11 +83,11 @@ const CardStack = styled(Stack)`
 
 export default function ReadingPage() {
   useFreeCount();
-  const setUserAccount = useSetRecoilState(accountInState);
+  const [userAccount, setUserAccount] = useRecoilState(accountInState);
   const [cardThrow, setCardThrow] = useState<TarotCard[] | undefined>(
     undefined
   );
-  const userAccount = useRecoilValue(account);
+
   const [freebs, setFreebies] = useRecoilState(freebies);
   const setAlert = useSetRecoilState(alert);
 
@@ -239,6 +238,13 @@ export default function ReadingPage() {
                 Get your spread
               </Button>
             </Form.Group>
+            {!userAccount.userId ? (
+              <Form.Group>
+                <Form.Label>
+                  * Sign up for extra free spreads and more insightful readings
+                </Form.Label>
+              </Form.Group>
+            ) : null}
           </ContentStack>
         </Form>
 
